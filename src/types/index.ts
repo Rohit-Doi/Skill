@@ -67,6 +67,9 @@ export interface MatchResult {
   missing_skills: string[];
   feedback: MatchFeedback;
   recommendations: string[];
+  course_recommendations?: CourseRecommendation[]; // optional: enriched client-side
+  missing_keywords?: string[]; // optional: keywords from JD not present in resume
+  resume_improvements?: string[]; // optional: actionable suggestions to improve resume
   created_at: string;
 }
 
@@ -82,4 +85,33 @@ export interface MatchFeedback {
 export interface SkillCategory {
   category: string;
   skills: string[];
+}
+
+export interface CourseRecommendation {
+  title: string; // Course title
+  provider: string; // e.g., Coursera, Udemy, edX
+  url: string; // Link to the course
+  skill: string; // The skill this course addresses
+}
+
+export interface SuggestedRole {
+  title: string; // e.g., Frontend Developer
+  match_score: number; // 0-100
+  reasons: string[]; // brief reasons why this fits
+  recommended_courses: CourseRecommendation[]; // targeted courses to improve gaps
+}
+
+export interface ResumeAnalysisResult {
+  id: string;
+  user_id: string;
+  overall_score: number; // 0-100 composite
+  breakdown: {
+    skill_score: number;
+    experience_score: number;
+    education_score: number;
+  };
+  strengths: string[];
+  weaknesses: string[];
+  suggested_roles: SuggestedRole[]; // sorted by match_score desc
+  created_at: string;
 }
